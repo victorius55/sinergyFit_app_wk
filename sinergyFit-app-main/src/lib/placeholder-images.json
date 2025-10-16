@@ -1,0 +1,76 @@
+{
+  "placeholderImages": [
+    {
+      "id": "routine-full-body",
+      "description": "A person doing a full body workout.",
+      "imageUrl": "https://images.unsplash.com/photo-1618688862225-ac941a9da58f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmaXRuZXNzJTIwd29ya291dHxlbnwwfHx8fDE3NTk3Njg5NjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fitness workout"
+    },
+    {
+      "id": "routine-upper-body",
+      "description": "A person focusing on an upper body exercise.",
+      "imageUrl": "https://images.unsplash.com/photo-1716380357940-13e4fc0330c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhcm0lMjBtdXNjbGV8ZW58MHx8fHwxNzU5NzcyMjE2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "arm muscle"
+    },
+    {
+      "id": "routine-lower-body",
+      "description": "A person doing squats.",
+      "imageUrl": "https://images.unsplash.com/photo-1646495001290-39103b31873a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsZWclMjB3b3Jrb3V0fGVufDB8fHx8MTc1OTcwNTgxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "leg workout"
+    },
+    {
+      "id": "routine-cardio",
+      "description": "A person running on a treadmill.",
+      "imageUrl": "https://images.unsplash.com/photo-1758520705390-ccfc66f2b18a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxydW5uaW5nJTIwY2FyZGlvfGVufDB8fHx8MTc1OTc3MjIxNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "running cardio"
+    },
+    {
+      "id": "exercise-squat",
+      "description": "Illustration of a squat exercise.",
+      "imageUrl": "https://images.unsplash.com/photo-1701826478825-8d975e7883f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzcXVhdCUyMGV4ZXJjaXNlfGVufDB8fHx8MTc1OTc3MjIxNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "squat exercise"
+    },
+    {
+      "id": "exercise-pushup",
+      "description": "Illustration of a push-up.",
+      "imageUrl": "https://images.unsplash.com/photo-1644594570589-ef85bd03169f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cHVzaHVwJTIwcGVyc29ufGVufDB8fHx8MTc1OTc3MjIxNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pushup person"
+    },
+    {
+      "id": "exercise-plank",
+      "description": "Illustration of a plank.",
+      "imageUrl": "https://images.unsplash.com/photo-1727432813810-cabde273e273?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwbGFuayUyMGZpdG5lc3N8ZW58MHx8fHwxNzU5NzA1MDg2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "plank fitness"
+    },
+    {
+      "id": "exercise-bicep-curl",
+      "description": "Illustration of a bicep curl.",
+      "imageUrl": "https://images.unsplash.com/photo-1759300642211-4e81a270a358?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YmljZXAlMjBjdXJsfGVufDB8fHx8MTc1OTY4NjE0NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bicep curl"
+    },
+    {
+      "id": "exercise-running",
+      "description": "Illustration of a person running.",
+      "imageUrl": "https://images.unsplash.com/photo-1623222319250-fe921126beda?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxqb2dnaW5nJTIwcGVyc29ufGVufDB8fHx8MTc1OTc3MjIxNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "jogging person"
+    },
+    {
+      "id": "recipe-chicken-stir-fry",
+      "description": "A delicious bowl of chicken stir-fry.",
+      "imageUrl": "https://images.unsplash.com/photo-1683553322798-f2aa901c1777?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjaGlja2VuJTIwc3Rpci1mcnl8ZW58MHx8fHwxNzU5NzcyMjE2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chicken stir-fry"
+    },
+    {
+      "id": "recipe-lentil-soup",
+      "description": "A hearty bowl of lentil soup.",
+      "imageUrl": "https://images.unsplash.com/photo-1605909388460-74ec8b204127?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsZW50aWwlMjBzb3VwfGVufDB8fHx8MTc1OTcwNjgwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "lentil soup"
+    },
+    {
+      "id": "recipe-breakfast-smoothie",
+      "description": "A vibrant and healthy breakfast smoothie.",
+      "imageUrl": "https://images.unsplash.com/photo-1655992590262-aeadeef445b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxicmVha2Zhc3QlMjBzbW9vdGhpZXxlbnwwfHx8fDE3NTk3MDU1NzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "breakfast smoothie"
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+/**
+ * @fileOverview Firestore Security Rules for the SynergyFit application.
+ *
+ * Core Philosophy:
+ * This ruleset enforces a strict user-ownership model for private data, while allowing public read access to preloaded content.
+ *
+ * Data Structure:
+ * - Users: /users/{userId}
+ * - User Routines: /users/{userId}/routines/{routineId}
+ * - Preloaded Routines: /routines_preloaded/{routineId}
+ * - Exercises: /users/{userId}/routines/{routineId}/exercises/{exerciseId}
+ * - User Recipes: /users/{userId}/recipes/{recipeId}
+ * - Preloaded Recipes: /recipes_preloaded/{recipeId}
+ * - Meal Plans: /users/{userId}/mealPlans/{mealPlanId}
+ *
+ * Key Security Decisions:
+ * - User data and associated routines, exercises, recipes, and meal plans are only accessible to the owning user.
+ * - Preloaded routines and recipes are publicly readable.
+ * - Data validation is relaxed to facilitate rapid prototyping, focusing on ownership and relational integrity checks.
+ * - Listing of preloaded routines and recipes is enabled for all users.
+ *
+ * Denormalization for Authorization:
+ * - The `userId` is embedded in the path for user-owned documents, enabling simple `isOwner()` checks.
+ *
+ * Structural Segregation:
+ * - Preloaded routines and recipes are stored in separate collections from user-created content to allow for different access control policies.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Allows a user to manage their own profile.
+     * @path /users/{userId}
+     * @allow (create) User with id 'user123' can create their profile.
+     * @allow (get) User with id 'user123' can read their profile.
+     * @allow (update) User with id 'user123' can update their profile.
+     * @allow (delete) User with id 'user123' can delete their profile.
+     * @deny (create) User with id 'user456' cannot create a profile for user 'user123'.
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId} {
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows a user to manage their own routines.
+     * @path /users/{userId}/routines/{routineId}
+     * @allow (create) User with id 'user123' can create a routine under their profile.
+     * @allow (get) User with id 'user123' can read a routine under their profile.
+     * @allow (update) User with id 'user123' can update a routine under their profile.
+     * @allow (delete) User with id 'user123' can delete a routine under their profile.
+     * @deny (create) User with id 'user456' cannot create a routine under user 'user123''s profile.
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/routines/{routineId} {
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows anyone to read preloaded routines, but restricts modifications.
+     * @path /routines_preloaded/{routineId}
+     * @allow (get) Any user can read preloaded routines.
+     * @allow (list) Any user can list preloaded routines.
+     * @deny (create) No one can create preloaded routines through the client.
+     * @deny (update) No one can update preloaded routines through the client.
+     * @deny (delete) No one can delete preloaded routines through the client.
+     * @principle Allows public read access while restricting write access.
+     */
+    match /routines_preloaded/{routineId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Allows a user to manage exercises within their routines.
+     * @path /users/{userId}/routines/{routineId}/exercises/{exerciseId}
+     * @allow (create) User with id 'user123' can create an exercise within their routine.
+     * @allow (get) User with id 'user123' can read an exercise within their routine.
+     * @allow (update) User with id 'user123' can update an exercise within their routine.
+     * @allow (delete) User with id 'user123' can delete an exercise within their routine.
+     * @deny (create) User with id 'user456' cannot create an exercise within user 'user123''s routine.
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/routines/{routineId}/exercises/{exerciseId} {
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows a user to manage their own recipes.
+     * @path /users/{userId}/recipes/{recipeId}
+     * @allow (create) User with id 'user123' can create a recipe under their profile.
+     * @allow (get) User with id 'user123' can read a recipe under their profile.
+     * @allow (update) User with id 'user123' can update a recipe under their profile.
+     * @allow (delete) User with id 'user123' can delete a recipe under their profile.
+     * @deny (create) User with id 'user456' cannot create a recipe under user 'user123''s profile.
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/recipes/{recipeId} {
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows anyone to read preloaded recipes, but restricts modifications.
+     * @path /recipes_preloaded/{recipeId}
+     * @allow (get) Any user can read preloaded recipes.
+     * @allow (list) Any user can list preloaded recipes.
+     * @deny (create) No one can create preloaded recipes through the client.
+     * @deny (update) No one can update preloaded recipes through the client.
+     * @deny (delete) No one can delete preloaded recipes through the client.
+     * @principle Allows public read access while restricting write access.
+     */
+    match /recipes_preloaded/{recipeId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Allows a user to manage their own meal plans.
+     * @path /users/{userId}/mealPlans/{mealPlanId}
+     * @allow (create) User with id 'user123' can create a meal plan under their profile.
+     * @allow (get) User with id 'user123' can read a meal plan under their profile.
+     * @allow (update) User with id 'user123' can update a meal plan under their profile.
+     * @allow (delete) User with id 'user123' can delete a meal plan under their profile.
+     * @deny (create) User with id 'user456' cannot create a meal plan under user 'user123''s profile.
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/mealPlans/{mealPlanId} {
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+  }
+}

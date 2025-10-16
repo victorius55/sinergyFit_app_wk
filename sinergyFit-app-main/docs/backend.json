@@ -1,0 +1,324 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user within the SynergyFit application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "name": {
+          "type": "string",
+          "description": "User's full name."
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "name"
+      ]
+    },
+    "Routine": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Routine",
+      "type": "object",
+      "description": "Represents an exercise routine, either preloaded or user-created.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the routine."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who created the routine. (Relationship: User 1:N Routine). Null if preloaded."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the routine."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the routine."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the image associated with the routine, stored in Firebase Storage."
+        },
+        "isPreloaded": {
+          "type": "boolean",
+          "description": "Indicates if the routine is preloaded or user-created."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "isPreloaded"
+      ]
+    },
+    "Exercise": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Exercise",
+      "type": "object",
+      "description": "Represents a single exercise within a routine.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the exercise."
+        },
+        "routineId": {
+          "type": "string",
+          "description": "Reference to the Routine this exercise belongs to. (Relationship: Routine 1:N Exercise)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the exercise."
+        },
+        "sets": {
+          "type": "number",
+          "description": "Number of sets for the exercise."
+        },
+        "reps": {
+          "type": "number",
+          "description": "Number of repetitions for the exercise."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes or instructions for the exercise."
+        }
+      },
+      "required": [
+        "id",
+        "routineId",
+        "name",
+        "sets",
+        "reps"
+      ]
+    },
+    "Recipe": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Recipe",
+      "type": "object",
+      "description": "Represents a recipe, either preloaded or user-created.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the recipe."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who created the recipe. (Relationship: User 1:N Recipe). Null if preloaded."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the recipe."
+        },
+        "ingredients": {
+          "type": "string",
+          "description": "List of ingredients for the recipe."
+        },
+        "instructions": {
+          "type": "string",
+          "description": "Step-by-step preparation instructions for the recipe."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the recipe image, stored in Firebase Storage."
+        },
+        "isPreloaded": {
+          "type": "boolean",
+          "description": "Indicates if the recipe is preloaded or user-created."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "ingredients",
+        "instructions",
+        "isPreloaded"
+      ]
+    },
+    "MealPlan": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MealPlan",
+      "type": "object",
+      "description": "Represents a meal plan for a specific day.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the meal plan."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User this meal plan belongs to. (Relationship: User 1:N MealPlan)"
+        },
+        "dayOfWeek": {
+          "type": "string",
+          "description": "Day of the week for the meal plan (e.g., Monday, Tuesday)."
+        },
+        "recipeId": {
+          "type": "string",
+          "description": "Reference to the Recipe assigned to this day. (Relationship: Recipe 1:N MealPlan)"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "dayOfWeek",
+        "recipeId"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous",
+      "google.com"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles.  Path-based ownership ensures only the user can access their profile.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/routines/{routineId}",
+        "definition": {
+          "entityName": "Routine",
+          "schema": {
+            "$ref": "#/backend/entities/Routine"
+          },
+          "description": "Stores user-created routines. Path-based ownership ensures only the user can access their routines.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "routineId",
+              "description": "The unique identifier of the routine."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/routines_preloaded/{routineId}",
+        "definition": {
+          "entityName": "Routine",
+          "schema": {
+            "$ref": "#/backend/entities/Routine"
+          },
+          "description": "Stores preloaded routines accessible to all users.",
+          "params": [
+            {
+              "name": "routineId",
+              "description": "The unique identifier of the routine."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/routines/{routineId}/exercises/{exerciseId}",
+        "definition": {
+          "entityName": "Exercise",
+          "schema": {
+            "$ref": "#/backend/entities/Exercise"
+          },
+          "description": "Stores exercises associated with a specific routine. Path-based ownership ensures only the owner of the routine can access the exercises.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "routineId",
+              "description": "The unique identifier of the routine."
+            },
+            {
+              "name": "exerciseId",
+              "description": "The unique identifier of the exercise."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/recipes/{recipeId}",
+        "definition": {
+          "entityName": "Recipe",
+          "schema": {
+            "$ref": "#/backend/entities/Recipe"
+          },
+          "description": "Stores user-created recipes. Path-based ownership ensures only the user can access their recipes.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "recipeId",
+              "description": "The unique identifier of the recipe."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/recipes_preloaded/{recipeId}",
+        "definition": {
+          "entityName": "Recipe",
+          "schema": {
+            "$ref": "#/backend/entities/Recipe"
+          },
+          "description": "Stores preloaded recipes accessible to all users.",
+          "params": [
+            {
+              "name": "recipeId",
+              "description": "The unique identifier of the recipe."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/mealPlans/{mealPlanId}",
+        "definition": {
+          "entityName": "MealPlan",
+          "schema": {
+            "$ref": "#/backend/entities/MealPlan"
+          },
+          "description": "Stores meal plans for each user. Path-based ownership ensures only the user can access their meal plans.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "mealPlanId",
+              "description": "The unique identifier of the meal plan."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to manage user data, routines, exercises, recipes, and meal plans for the SynergyFit application. It prioritizes authorization independence by denormalizing user ownership, which allows for secure and scalable data access rules without relying on `get()` calls in security rules.\n\n*   **Users:** User data is stored in `/users/{userId}`, following the Path-Based Ownership access model. This is the standard approach to storing private user data.\n*   **Routines:** User-created routines are stored under `/users/{userId}/routines/{routineId}`. The `userId` is part of the path, ensuring only the user has access. Preloaded routines are stored in a separate collection `/routines_preloaded/{routineId}`. This segregation allows for different security rules: user routines are private, while preloaded routines can be read by all users. The routine includes an `imageUrl` field, which is the path to the image uploaded to Firebase Storage.\n*   **Exercises:** Exercises are stored as subcollections of routines: `/users/{userId}/routines/{routineId}/exercises/{exerciseId}`. The path includes both `userId` and `routineId`, ensuring that exercises are only accessible within their respective routines and by the routine owner.\n*   **Recipes:** User-created recipes are stored under `/users/{userId}/recipes/{recipeId}`. Similar to routines, the `userId` in the path ensures ownership and simplifies security rules. Preloaded recipes are in `/recipes_preloaded/{recipeId}`. The recipe includes an `imageUrl` field, which is the path to the image uploaded to Firebase Storage.\n*   **Meal Plans:** Meal plans are stored under `/users/{userId}/mealPlans/{mealPlanId}`. This structure clearly associates meal plans with their respective users, ensuring data privacy and access control.\n\nThis structure supports secure `list` operations (QAPs) because data with different access requirements are stored in separate collections or subcollections. Path-based ownership ensures that listing routines or recipes under a user's path is inherently secure. Preloaded routines and recipes can be listed separately with different rules."
+  }
+}
